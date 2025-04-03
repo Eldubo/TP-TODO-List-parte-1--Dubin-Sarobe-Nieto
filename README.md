@@ -9,3 +9,4 @@ Links sobre localStorage:
 //https://www.freecodecamp.org/espanol/news/como-usar-localstorage-en-javascript/ 
 //https://es.stackoverflow.com/questions/440345/imprimir-todos-los-resultados-de-localstorage 
 //https://es.javascript.info/localstorage 
+//https://www.forosdelweb.com/f13/contar-cantidad-li-ul-587129/ 

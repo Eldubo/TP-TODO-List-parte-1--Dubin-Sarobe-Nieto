@@ -1,128 +1,133 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
+/* Reset de márgenes y paddings */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Fondo global */
 body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
     padding: 20px;
 }
 
+/* Contenedor de ingreso de tarea */
 #divIngreso {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    padding: 30px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 500px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 }
 
+/* Input de tarea */
 #ingresoUsuario {
-    width: 70%;
-    padding: 12px;
-    border: none;
-    border-radius: 25px;
+    width: 300px;
+    padding: 12px 20px;
     font-size: 16px;
-    outline: none;
-    transition: all 0.3s ease;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #333;
+    transition: border-color 0.3s ease;
 }
 
 #ingresoUsuario:focus {
-    box-shadow: 0 0 0 2px #764ba2;
+    outline: none;
+    border-color: #5D6D7E;
+    box-shadow: 0 0 5px rgba(93, 109, 126, 0.5);
 }
 
+/* Botón de añadir tarea */
 #botonIngreso {
-    width: 28%;
-    padding: 12px;
-    border: none;
-    border-radius: 25px;
-    background-color: #764ba2;
+    background-color: #5D6D7E;
     color: white;
+    border: none;
+    padding: 12px 30px;
     font-size: 16px;
+    border-radius: 25px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 #botonIngreso:hover {
-    background-color: #5e3d82;
+    background-color: #2C3E50;
     transform: translateY(-2px);
 }
 
+/* Lista de tareas */
 #mostrarLista {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    padding: 30px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 500px;
+    max-width: 450px;
+    margin-top: 20px;
 }
 
-ul {
-    list-style-type: none;
+#UL {
+    list-style: none;
+    padding: 0;
 }
 
-li {
-    background: rgba(255, 255, 255, 0.7);
+#UL li {
+    background-color: #fff;
+    color: #555;
+    margin: 10px 0;
     padding: 15px;
     border-radius: 8px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.3s ease;
+    font-size: 18px;
+    border: 1px solid #e0e0e0;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
 }
 
-li:hover {
-    background: rgba(255, 255, 255, 0.9);
-    transform: translateY(-2px);
+#UL li:hover {
+    background-color: #f1f1f1;
+    transform: translateY(-1px);
 }
 
-li.checked {
+#UL li.checked {
+    background-color: #E8F4E8;
+    color: #7D8B7A;
     text-decoration: line-through;
-    color: #888;
 }
 
-li::before {
-    content: '\f00c';
-    font-family: 'Font Awesome 6 Free';
-    margin-right: 10px;
-    color: #764ba2;
-    opacity: 0;
-    transition: all 0.3s ease;
+/* Icono de eliminar */
+#UL li i {
+    margin-left: 10px;
+    color: #D9534F;
+    cursor: pointer;
 }
 
-li.checked::before {
-    opacity: 1;
+#UL li i:hover {
+    color: #C13515;
 }
 
-@media (max-width: 600px) {
-    #divIngreso, #mostrarLista {
-        width: 90%;
-    }
-
-    #ingresoUsuario, #botonIngreso {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-}
-
+/* Animación sutil */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-#divIngreso, #mostrarLista {
+#UL li {
     animation: fadeIn 0.5s ease-out;
+}
+
+/* Estilos generales de tipografía */
+h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
 }
