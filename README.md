@@ -10,3 +10,8 @@ Links sobre localStorage:
 //https://es.stackoverflow.com/questions/440345/imprimir-todos-los-resultados-de-localstorage 
 //https://es.javascript.info/localstorage 
 //https://www.forosdelweb.com/f13/contar-cantidad-li-ul-587129/ 
+//https://desarrolloweb.com/articulos/995.php --> uso de checkbox, como manipularlo desde js
+
+
+
+https://es.stackoverflow.com/questions/240735/error-unexpected-token-h-in-json-at-position-0-at-json-parse-anonymous 

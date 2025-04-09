@@ -1,133 +1,165 @@
-/* Reset de márgenes y paddings */
+/* styles.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+:root {
+    --bg: #f5f7fa;
+    --text: #1f2937;
+    --primary: #3b82f6;
+    --secondary: #e0e7ff;
+    --completed: #10b981;
+    --danger: #ef4444;
+    --white: #ffffff;
+    --shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    --radius: 14px;
+    --transition: 0.3s ease;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Fondo global */
 body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    padding: 3rem 1rem;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: 100vh;
-    text-align: center;
-    padding: 20px;
 }
 
-/* Contenedor de ingreso de tarea */
-#divIngreso {
-    margin-bottom: 20px;
+/* Botones de filtros */
+.filtros {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+    gap: 1rem;
+    margin-bottom: 2rem;
 }
 
-/* Input de tarea */
-#ingresoUsuario {
-    width: 300px;
-    padding: 12px 20px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #fff;
-    color: #333;
-    transition: border-color 0.3s ease;
-}
-
-#ingresoUsuario:focus {
-    outline: none;
-    border-color: #5D6D7E;
-    box-shadow: 0 0 5px rgba(93, 109, 126, 0.5);
-}
-
-/* Botón de añadir tarea */
-#botonIngreso {
-    background-color: #5D6D7E;
-    color: white;
+.filtros button {
+    background-color: var(--secondary);
+    color: var(--primary);
     border: none;
-    padding: 12px 30px;
-    font-size: 16px;
-    border-radius: 25px;
+    padding: 0.9rem 1.6rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color var(--transition);
+}
+
+.filtros button:hover {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+/* Entrada de tareas */
+#divIngreso {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+#ingresoUsuario {
+    flex: 1;
+    padding: 0.9rem 1.2rem;
+    border: 1px solid #ccc;
+    border-radius: var(--radius);
+    font-size: 1rem;
+}
+
+#botonIngreso {
+    background-color: var(--primary);
+    color: var(--white);
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius);
+    padding: 0.9rem 1.6rem;
+    cursor: pointer;
+    transition: background-color var(--transition);
 }
 
 #botonIngreso:hover {
-    background-color: #2C3E50;
-    transform: translateY(-2px);
+    background-color: #2563eb;
 }
 
 /* Lista de tareas */
 #mostrarLista {
     width: 100%;
-    max-width: 450px;
-    margin-top: 20px;
+    max-width: 600px;
 }
 
 #UL {
     list-style: none;
+    margin-top: 1rem;
     padding: 0;
 }
 
 #UL li {
-    background-color: #fff;
-    color: #555;
-    margin: 10px 0;
-    padding: 15px;
-    border-radius: 8px;
-    font-size: 18px;
-    border: 1px solid #e0e0e0;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    cursor: pointer;
+    background-color: var(--white);
+    padding: 1rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all var(--transition);
 }
 
-#UL li:hover {
-    background-color: #f1f1f1;
-    transform: translateY(-1px);
-}
-
-#UL li.checked {
-    background-color: #E8F4E8;
-    color: #7D8B7A;
+#UL li.completada {
+    background-color: #ecfdf5;
+    color: #6b7280;
     text-decoration: line-through;
+    border-left: 5px solid var(--completed);
 }
 
-/* Icono de eliminar */
-#UL li i {
-    margin-left: 10px;
-    color: #D9534F;
+/* Botones de acciones */
+.acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+    max-width: 600px;
+    justify-content: center;
+}
+
+.acciones button {
+    background-color: var(--white);
+    color: var(--text);
+    border: 1px solid #d1d5db;
+    padding: 0.8rem 1.4rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: background-color var(--transition), color var(--transition);
+}
+
+.acciones button:hover {
+    background-color: var(--danger);
+    color: var(--white);
+}
+
+/* Ícono de papelera */
+.fa-trash {
+    color: var(--danger);
+    margin-right: 0.5rem;
     cursor: pointer;
 }
 
-#UL li i:hover {
-    color: #C13515;
+.fa-trash:hover {
+    color: #dc2626;
 }
 
-/* Animación sutil */
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-        transform: translateY(10px);
+@media (max-width: 600px) {
+    #divIngreso, .filtros, .acciones {
+        flex-direction: column;
+        align-items: stretch;
     }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-#UL li {
-    animation: fadeIn 0.5s ease-out;
-}
-
-/* Estilos generales de tipografía */
-h1 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 20px;
 }

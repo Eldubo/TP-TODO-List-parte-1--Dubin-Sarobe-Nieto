@@ -1,15 +1,20 @@
 document.addEventListener("DOMContentLoaded", mostrarTareas);
 
-function añadirTarea(){
+function añadirTarea() {
    let textoTarea = document.getElementById("ingresoUsuario").value.trim();
 
    if (textoTarea !== "") {
       let cantTareasLS = parseInt(localStorage.getItem('length')) || 0;
-      
-      // Guardar la tarea con una clave única
-      localStorage.setItem('value' + cantTareasLS, textoTarea);
-      localStorage.setItem('length', cantTareasLS + 1);
 
+      const tarea = {
+         texto: textoTarea,
+         creadaMomento: new Date().toISOString(),
+         completada: false, 
+         completadaMomento : null
+      };
+      console.log(tarea);
+      localStorage.setItem('value',cantTareasLS, JSON.stringify(tarea));
+      console.log(localStorage.getItem(cantTareasLS));
       document.getElementById("ingresoUsuario").value = "";
       mostrarTareas();
    } else {
@@ -17,82 +22,136 @@ function añadirTarea(){
    }
 }
 
-function mostrarTareas() {
+
+function mostrarTareas(filtro = "todas") {
    let ul = document.getElementById("UL");
    ul.innerHTML = "";
 
    let cantTareasLS = parseInt(localStorage.getItem('length')) || 0;
 
-   if (cantTareasLS > 0) {
-   for (let i = 0; i < cantTareasLS; i++) {
-      let tarea = localStorage.getItem('value' + i);
-      
-
+   if(cantTaresLS){
+      for (let i = 0; i < cantTareasLS; i++) {
+         let tarea = JSON.parse(localStorage.getItem(i));
+         // if (!tareaJSON) continue;
+   
+   
+         if (
+            (filtro === "completadas" && !tarea.completada) ||
+            (filtro === "pendientes" && tarea.completada)
+         ) continue;
+   
          let li = document.createElement("li");
-
-         let miInput = document.createElement('input');
-         miInput.setAttribute('type', 'checkbox');
-
-         let texto = document.createTextNode(" " + tarea);
-
+         let miInput = document.createElement("input");
+         miInput.type = "checkbox";
+         miInput.checked = !!tarea.completada;
+   
+         let texto = document.createTextNode(" " + tarea.texto + ` (creada: ${new Date(tarea.creada).toLocaleString()})`);
+   
          li.appendChild(miInput);
          li.appendChild(texto);
-
          ul.appendChild(li);
       }
    }
+   
 }
+
 function marcarComoCompletadas (){
-         
-
-         
-         ul=document.getElementById('UL');
-         elementosLi=el.getElementsByTagName('li');
-         
          let cantTareasCompletadas = 0;
-         for(i=0;i<elementosLi.length;i++){
+         const tareasSeleccionadas = identificarTareasSeleccionadas();
+
+         if(tareasSeleccionadas > 0){
+            for(i=0;i<tareasSeleccionadas.length;i++){
          
-      if(elementosLi[i].parentNode==ul && elementosLi[i].checked = true) //Hay q agregar algo q haga referencia a que es un input? (o sea, no referirse directo a el elemento en la lista, sino al input- Qué habría que agregar)
-        {
-         cantTareasCompletadas++;
-         elementosLi.style.textDecoration = "line-through";        
+               
+                  cantTareasCompletadas++;
+                  elementosLi[tareasSeleccionadas[i]].style.textDecoration = "line-through";        
+                  elementosLi[tareasSeleccionadas[i]].completadaMomento = new Date().toISOString();
+                  elementosLi[tareasSeleccionadas[i]].completada = true;
+            }
+            cantTareasCompletadas != 0 && alert(cantTareasCompletadas + "tareas se marcaron como completadas");
+            
+         }else{
+            alert("No hay tareas seleccionadas");
+         }
          
-      }
-      if(cantTareasCompletadas == 0) ?? alert("No hay tareas seleccionadas");
-      alert(cantTareasCompletadas + "tareas se marcaron como completadas");
-      }else{
-         alert("Aún no hay tareas");
-      }
 }
 
-function identificarTareasSeleccionadas(){
-   /* let cantTareasLS = parseInt(localStorage.getItem('length')) || 0;
-   if (cantTareasLS > 0) {
-   for (let i = 0; i < cantTareasLS; i++) {
-      let tarea = localStorage.getItem('value' + i);   }
-      
-      No me interesa si hay tareas en el LS, sino que me interesa si hay cargadas en la ul
-      */ 
-      ul=document.getElementById('UL');
-      elementosLi=el.getElementsByTagName('li');
-      
-      let tareasCompletadas = [];
-      for(i=0;i<elementosLi.length;i++){
-      tareasComplatadas.add(i);
-   if(elementosLi[i].parentNode==ul && elementosLi[i].checked = true) //Hay q agregar algo q haga referencia a que es un input? (o sea, no referirse directo a el elemento en la lista, sino al input- Qué habría que agregar)
-     {
+function identificarTareasSeleccionadas() {
+   let ul = document.getElementById('UL');
+   let elementosLi = ul.getElementsByTagName('li');
+   let tareasSeleccionadas = [];
+   if(elementosLi != 0){
+      for (let i = 0; i < elementosLi.length; i++) {
+         let checkbox = elementosLi[i].querySelector('input[type="checkbox"]');
+         if (checkbox && checkbox.checked) {
+            tareasSeleccionadas.push(i);
+         }
       }
+   }
+  function identificarTareasCompletadas(){ //Hacer
+   let ul = document.getElementById('UL');
+   let elementosLi = ul.getElementsByTagName('li');
+   let tareasCompletadas = [];
+   if(elementosLi != 0){
+      for (let i = 0; i < elementosLi.length; i++) {
+         let checkbox = elementosLi[i].querySelector('input[type="checkbox"]');
+         if (checkbox && checkbox.checked) {
+            tareasCompletadas.push(i);
+         }
+      }
+   }
+   return tareasCompletadas;
+  } 
+
+   console.log("Tareas seleccionadas:", tareasCompletadas);
+   return tareasCompletadas;
 }
 
 function eliminarTareas() {
-   let ul = document.getElementById("UL");
-   let cantTareasLS = parseInt(localStorage.getItem('length')) || 0;
-   if (cantTareasLS > 0) {
+      let tareasSeleccionadas = identificarTareasSeleccionadas();
 
-   }else{
-      alert("Aún no hay tareas");
+
+      if(tareasSeleccionadas > 0){
+         for(i=0;i<tareasSeleccionadas.length;i++){
+            console.log(tareasSeleccionadas[i]);
+            localStorage.removeItem(tareasSeleccionadas[i]);
+               cantTareasEliminadas++;
+         }
+         cantTareasCompletadas != 0 && alert(cantTareasCompletadas + "tareas se marcaron como completadas");
+         
+      }else{
+         alert("No hay tareas seleccionadas");
+      }
+
+}
+function eliminarTareasCompletadas(){
+   const tareasCompletadas = identificarTareasCompletadas(); //Terminar fc
+}
+function tareaMasRapida() {
+   let cantTareasLS = parseInt(localStorage.getItem("length")) || 0;
+   let tareaRapida = null;
+   let menorDuracion = Infinity;
+
+   for (let i = 0; i < cantTareasLS; i++) {
+      let tareaJSON = localStorage.getItem(i);
+      if (!tareaJSON) continue;
+
+      let tarea = JSON.parse(tareaJSON);
+      if (tarea.completada) {
+         let creada = new Date(tarea.creada).getTime();
+         let finalizada = new Date(tarea.completadaMomento).getTime();
+         let duracion = finalizada - creada;
+
+         if (duracion < menorDuracion) {
+            menorDuracion = duracion;
+            tareaRapida = tarea;
+         }
+      }
    }
-   localStorage.clear();
-   localStorage.setItem('length', 0);
-   ul.innerHTML = "";
+
+   if (tareaRapida) {
+      alert(`Tarea más rápida: "${tareaRapida.texto}"\nDuración: ${(menorDuracion / 1000).toFixed(2)} segundos`);
+   } else {
+      alert("No hay tareas completadas todavía.");
+   }
 }

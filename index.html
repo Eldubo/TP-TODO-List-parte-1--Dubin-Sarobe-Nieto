@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+    <button onclick="mostrarTareas('todas')">Todas</button>
+    <button onclick="mostrarTareas('pendientes')">Pendientes</button>
+    <button onclick="mostrarTareas('completadas')">Completadas</button>
     <div id="divIngreso">
         <input type="text" placeholder="Ingresa tu tarea" id="ingresoUsuario">
         <button id="botonIngreso" onclick="añadirTarea()">Añadir Tarea</button>
@@ -23,6 +26,9 @@
         <button id="eliminarTareas" onclick="eliminarTareas()">Eliminar</button>
     </i>
     <button  onclick="marcarComoCompletadas()">Completado</button>
+    <button  onclick="eliminarTareasCompletadas()">Eliminar tareas completadas</button>
+
+    <button onclick="tareaMasRapida()">Tarea más rápida</button>
 
     <script src="js/script.js"></script>
 </body>
