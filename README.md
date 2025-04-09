@@ -15,3 +15,28 @@ Links sobre localStorage:
 
 
 https://es.stackoverflow.com/questions/240735/error-unexpected-token-h-in-json-at-position-0-at-json-parse-anonymous 
+
+Tener en cuenta que de la manera en que lo estamos resolviendo si se eliminan tareas no van a cambiar su orden 
+
+
+// https://es.stackoverflow.com/questions/22883 como-hacer-un-checked-al-padre-cuando-selecciono-al-hijo-en-un-checkbox-con-jqu 
+
+
+// Selecciona todos los checkboxes
+const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+// Añade un evento 'change' a cada checkbox
+checkboxes.forEach(checkbox => {
+  checkbox.addEventListener('change', function() {
+    // Obtiene el elemento padre del checkbox seleccionado
+    const parentElement = this.parentElement;
+
+    // Añade un event listener al elemento padre
+    parentElement.addEventListener('click', function() {
+      console.log('El elemento padre ha sido clickeado.');
+    });
+
+    console.log('Checkbox seleccionado:', this);
+    console.log('Elemento padre:', parentElement);
+  });
+});
