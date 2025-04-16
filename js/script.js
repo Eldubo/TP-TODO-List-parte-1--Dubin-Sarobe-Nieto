@@ -1,7 +1,8 @@
 
 document.addEventListener("DOMContentLoaded", () => mostrarTareas());
+localStorage.clear();
 
-function añadirTarea() {
+function aniadirTarea() {
    let textoTarea = document.getElementById("ingresoUsuario").value.trim();
 
    if (textoTarea !== "") {
@@ -12,7 +13,7 @@ function añadirTarea() {
          creadaMomento: new Date().toISOString(),
          completada: false, 
          completadaMomento: null, 
-         checked: false
+         checkeado: false
       };
 
       localStorage.setItem(cantTareasLS, JSON.stringify(tarea));
@@ -28,30 +29,44 @@ function añadirTarea() {
    //Luego de identificarlo hay que obtener el nro en el local storage - Cómo? - y chequearlo 
 //}
 
-let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+VerificarChequeo(){
 
+}
+let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+console.log(checkboxes);
 //Hacer referenciaal elemento padre - querySelector('input[type="checkbox"]') no está bien
 
 
 //Reemplazado por:
-   checkboxes.forEach(checkbox => {
-      checkbox.addEventListener('change', function() {
-         const parentElement = this.parentElement; //Toma el elemento padre, que debería ser el li
-         //Cómo identificar qué número de li es?
-      }
+checkboxes.forEach(checkbox => {
+   checkboxes.addEventListener('change', function() {
+      console.log('Entra al eventListener');
+         if(checkbox.checked){
+            const parentElement = this.parentElement;
+            console.log(parentElement);
+            localStorage.getItem('');
+         }
+         const parentElement = this.parentElement;//Toma el elemento padre, que debería ser el li (o es el input?)
+         const id = parentElement.id; //Toma el id del li, que coincide con el nombre en el Local Storage  
+         
+         localStorage.getItem(id);
+      
+      
    //Quiero obtener el name en el LS --> Cómo hago eso?
-   tarea.checked ? tarea.checked = false : tarea.checked = true; 
-    console.log(tarea.checked);
+    console.log(tarea.checkeado);
  })
+})
+
+ 
 
 function mostrarTareas(filtro = "todas") {
    let ul = document.getElementById("UL");
-   ul.innerHTML = "";
    let cantTareasLS = parseInt(localStorage.getItem('length')) || 0;
 
    for (let i = 0; i < cantTareasLS; i++) {
       let tareaJSON = localStorage.getItem(i);
       if (!tareaJSON) continue;
+
 
       let tarea = JSON.parse(tareaJSON);
 
@@ -64,6 +79,7 @@ function mostrarTareas(filtro = "todas") {
       let miInput = document.createElement("input");
       miInput.type = "checkbox";
       miInput.checked = tarea.completada;
+      miInput.setAttribute("id", i);
 
       let texto = document.createTextNode(
          ` ${tarea.texto} (creada: ${new Date(tarea.creadaMomento).toLocaleString()})`
@@ -99,14 +115,23 @@ function marcarComoCompletadas (){
 function identificarTareasSeleccionadas() {
    let ul = document.getElementById('UL');
    let elementosLi = ul.getElementsByTagName('li');
+   let cantElementosLi = elementosLi.length;
+
+   console.log("elementosLi "+cantElementosLi)
+
    let tareasLS = parseInt(localStorage.getItem("length")) || 0;
    let tareasSeleccionadas = [];
+
+   console.log(tareasLS); 
+   
    if(tareasLS != 0){
-      for (let i = 0; i < tareasLS; i++) {
-         if (tareasLS[i].checked) {
-            tareasSeleccionadas.push(i); //Coincide con el nombre con el que está guardado en el LS
+      for(let i = 0; i < tareasLS; i++){
+         if(elementosLi[i].checked){
+            tareasLS[i].checkequedo = true;
+            tareasSeleccionadas.push(i);
          }
       }
+
    }
    console.log("Tareas seleccionadas:", tareasCompletadas);
       return tareasSeleccionadas;
