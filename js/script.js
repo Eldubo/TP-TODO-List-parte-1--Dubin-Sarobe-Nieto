@@ -84,13 +84,12 @@ function marcarComoCompletadas (){
 }
 
 
-//Debería ir todo adentro de una función para que se active cuando pasa x cosa y ahí seleccione 
 let checkboxes = document.querySelectorAll('input[type="checkbox"]');
 console.log(checkboxes);
-//Hacer referenciaal elemento padre - querySelector('input[type="checkbox"]') no está bien
+//Hacer referencia al elemento padre - querySelector('input[type="checkbox"]') no está bien
+//Checkboxes cuando se inicia es vacío y dsp no se cambia --> Debería ir todo adentro de una función para que se active cuando pasa x cosa y ahí seleccione los checkboxes
 
 
-//Reemplazado por:
 checkboxes.forEach(checkbox => {
    checkboxes.addEventListener('change', function() {
       console.log('Entra al eventListener');
@@ -105,7 +104,6 @@ checkboxes.forEach(checkbox => {
          localStorage.getItem(id);
       
       
-   //Quiero obtener el name en el LS --> Cómo hago eso?
     console.log(tarea.checkeado);
  })
 })
