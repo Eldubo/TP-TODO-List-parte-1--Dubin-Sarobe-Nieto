@@ -29,35 +29,6 @@ function aniadirTarea() {
    //Luego de identificarlo hay que obtener el nro en el local storage - Cómo? - y chequearlo 
 //}
 
-VerificarChequeo(){
-
-}
-let checkboxes = document.querySelectorAll('input[type="checkbox"]');
-console.log(checkboxes);
-//Hacer referenciaal elemento padre - querySelector('input[type="checkbox"]') no está bien
-
-
-//Reemplazado por:
-checkboxes.forEach(checkbox => {
-   checkboxes.addEventListener('change', function() {
-      console.log('Entra al eventListener');
-         if(checkbox.checked){
-            const parentElement = this.parentElement;
-            console.log(parentElement);
-            localStorage.getItem('');
-         }
-         const parentElement = this.parentElement;//Toma el elemento padre, que debería ser el li (o es el input?)
-         const id = parentElement.id; //Toma el id del li, que coincide con el nombre en el Local Storage  
-         
-         localStorage.getItem(id);
-      
-      
-   //Quiero obtener el name en el LS --> Cómo hago eso?
-    console.log(tarea.checkeado);
- })
-})
-
- 
 
 function mostrarTareas(filtro = "todas") {
    let ul = document.getElementById("UL");
@@ -111,6 +82,36 @@ function marcarComoCompletadas (){
          }
          
 }
+
+
+//Debería ir todo adentro de una función para que se active cuando pasa x cosa y ahí seleccione 
+let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+console.log(checkboxes);
+//Hacer referenciaal elemento padre - querySelector('input[type="checkbox"]') no está bien
+
+
+//Reemplazado por:
+checkboxes.forEach(checkbox => {
+   checkboxes.addEventListener('change', function() {
+      console.log('Entra al eventListener');
+         if(checkbox.checked){
+            const parentElement = this.parentElement;
+            console.log(parentElement);
+            localStorage.getItem('');
+         }
+         const parentElement = this.parentElement;//Toma el elemento padre, que debería ser el li (o es el input?)
+         const id = parentElement.id; //Toma el id del li, que coincide con el nombre en el Local Storage  
+         
+         localStorage.getItem(id);
+      
+      
+   //Quiero obtener el name en el LS --> Cómo hago eso?
+    console.log(tarea.checkeado);
+ })
+})
+
+ 
+
 
 function identificarTareasSeleccionadas() {
    let ul = document.getElementById('UL');
