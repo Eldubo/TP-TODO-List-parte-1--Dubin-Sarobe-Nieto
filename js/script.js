@@ -32,11 +32,12 @@ function aniadirTarea() {
 
 function mostrarTareas(filtro = "todas") {
    let ul = document.getElementById("UL");
+   ul.innerHTML = "";
    let cantTareasLS = parseInt(localStorage.getItem('length')) || 0;
 
    for (let i = 0; i < cantTareasLS; i++) {
       let tareaJSON = localStorage.getItem(i);
-      if (!tareaJSON) continue;
+      if (!tareaJSON) continue; //Puede ser q no esté la tarea pq se completó y se borró, así que está bien la verificación
 
 
       let tarea = JSON.parse(tareaJSON);
@@ -62,9 +63,21 @@ function mostrarTareas(filtro = "todas") {
    }
 }
 
-function marcarComoCompletadas (){
+
+/*
+
+Uncaught (in promise) ReferenceError: tareasCompletadas is not defined
+at identificarTareasSeleccionadas (script.js:136:41)
+at marcarComoCompletadas (script.js:68:44)
+at HTMLButtonElement.onclick (index.html:29:48)
+identificarTareasSeleccionadas @ script.js:136
+marcarComoCompletadas @ script.js:68
+onclick @ index.html:29
+
+*/
+async function marcarComoCompletadas (){
          let cantTareasCompletadas = 0;
-         const tareasSeleccionadas = identificarTareasSeleccionadas();
+         const tareasSeleccionadas = await identificarTareasSeleccionadas(); //--> Entra pq sale el console.log de elementosLi y el  console.log(tareasLS); , pero acá el valor de tareas es undefined
 
          if(tareasSeleccionadas > 0){
             for(i=0;i<tareasSeleccionadas.length;i++){
@@ -111,12 +124,12 @@ checkboxes.forEach(checkbox => {
  
 
 
-function identificarTareasSeleccionadas() {
+ function identificarTareasSeleccionadas() {
    let ul = document.getElementById('UL');
    let elementosLi = ul.getElementsByTagName('li');
    let cantElementosLi = elementosLi.length;
 
-   console.log("elementosLi "+cantElementosLi)
+   console.log("elementosLi "+cantElementosLi);
 
    let tareasLS = parseInt(localStorage.getItem("length")) || 0;
    let tareasSeleccionadas = [];
@@ -125,7 +138,7 @@ function identificarTareasSeleccionadas() {
    
    if(tareasLS != 0){
       for(let i = 0; i < tareasLS; i++){
-         if(elementosLi[i].checked){
+         if(elementosLi[i].checked){//Estoy preguntando si el elemento del li esta chequeado --> tal vez habria q hacer referencia al input primero
             tareasLS[i].checkequedo = true;
             tareasSeleccionadas.push(i);
          }
@@ -138,20 +151,25 @@ function identificarTareasSeleccionadas() {
   function identificarTareasCompletadas(){ 
    let ul = document.getElementById('UL');
    let elementosLi = ul.getElementsByTagName('li');
-   let tareasLS = parseInt(localStorage.getItem("length")) || 0;
+   let cantTareasLS = parseInt(localStorage.getItem("length")) || 0;
    let tareasCompletadas = [];
+
    if(tareasLS != 0){
-      for (let i = 0; i < tareasLS; i++) {
-         if (tareasLS[i].completada) {
-            tareasCompletadas.push(i);
-         }
+   for (let i = 0; i < cantTareasLS; i++) {
+      let tareaJSON = localStorage.getItem(i);
+      if (!tareaJSON) continue; //Puede ser q no esté la tarea pq se completó y se borró, así que está bien la verificación
+      let tarea = JSON.parse(tareaJSON);
+
+      if (tarea[i].completada) {
+         tareasCompletadas.push(i);
       }
-   }   
+   }
+  
    
    console.log("Tareas completadas:", tareasCompletadas);
       return tareasCompletadas;
   } 
-
+  }
 function eliminarTareas() {
       let tareasSeleccionadas = identificarTareasSeleccionadas();
       let cantTareasEliminadas = 0
