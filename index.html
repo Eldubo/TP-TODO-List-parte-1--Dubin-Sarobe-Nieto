@@ -10,9 +10,9 @@
 </head>
 <body>
     <h1>📝 Lista de Tareas</h1>
-    <button onclick="mostrarTareas('todas')">Todas</button>
-    <button onclick="mostrarTareas('pendientes')">Pendientes</button>
-    <button onclick="mostrarTareas('completadas')">Completadas</button>
+    <button class="acciones" onclick="mostrarTareas('todas')">Todas</button>
+    <button class="acciones" onclick="mostrarTareas('pendientes')">Pendientes</button>
+    <button class="acciones" onclick="mostrarTareas('completadas')">Completadas</button>
     <div id="divIngreso">
         <input type="text" placeholder="Ingresa tu tarea" id="ingresoUsuario">
         <button id="botonIngreso" onclick="aniadirTarea()">Añadir Tarea</button>
@@ -24,12 +24,12 @@
         </ul>
     </div>
     <i class="fa-sharp fa-solid fa-trash">
-        <button id="eliminarTareas" onclick="eliminarTareas()">Eliminar</button>
+        <button class="acciones" id="eliminarTareas" onclick="eliminarTareas()">Eliminar</button>
     </i>
-    <button  onclick="marcarComoCompletadas()">Completado</button>
-    <button  onclick="eliminarTareasCompletadas()">Eliminar tareas completadas</button>
+    <button class="acciones" onclick="marcarComoCompletadas()">Completado</button>
+    <button class="acciones" onclick="eliminarTareasCompletadas()">Eliminar tareas completadas</button>
 
-    <button onclick="tareaMasRapida()">Tarea más rápida</button>
+    <button class="acciones" onclick="tareaMasRapida()">Tarea más rápida</button>
 
     <script src="js/script.js"></script>
 </body>
