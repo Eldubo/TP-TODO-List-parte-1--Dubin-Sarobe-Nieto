@@ -1,6 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", () => mostrarTareas());
-localStorage.clear();
+
 
 function aniadirTarea() {
    let textoTarea = document.getElementById("ingresoUsuario").value.trim();
@@ -77,16 +77,16 @@ onclick @ index.html:29
 */
 async function marcarComoCompletadas (){
          let cantTareasCompletadas = 0;
-         const tareasSeleccionadas = await identificarTareasSeleccionadas(); //--> Entra pq sale el console.log de elementosLi y el  console.log(tareasLS); , pero acá el valor de tareas es undefined
+         const tareasSeleccionadasEnLi = identificarTareasSeleccionadas(); //--> Entra pq sale el console.log de elementosLi y el  console.log(tareasLS); , pero acá el valor de tareas es undefined
 
          if(tareasSeleccionadas > 0){
             for(i=0;i<tareasSeleccionadas.length;i++){
          
                
                   cantTareasCompletadas++;
-                  elementosLi[tareasSeleccionadas[i]].style.textDecoration = "line-through";        
-                  localStorage.getItem(tareasSeleccionadas[i]).completadaMomento = new Date().toISOString();
-                  localStorage.getItem(tareasSeleccionadas[i]).completada = true;
+                  elementosLi[tareasSeleccionadasEnLi[i]].style.textDecoration = "line-through";        
+                  localStorage.getItem(tareasSeleccionadasEnLi[i]).completadaMomento = new Date().toISOString();
+                  localStorage.getItem(tareasSeleccionadasEnLi[i]).completada = true;
             }
             cantTareasCompletadas != 0 && alert(cantTareasCompletadas + "tareas se marcaron como completadas");
             
@@ -100,6 +100,8 @@ async function marcarComoCompletadas (){
 let checkboxes = document.querySelectorAll('input[type="checkbox"]');
 console.log(checkboxes);
 //Hacer referencia al elemento padre - querySelector('input[type="checkbox"]') no está bien
+
+//!!!!!!!!!!!!!!!!!
 //Checkboxes cuando se inicia es vacío y dsp no se cambia --> Debería ir todo adentro de una función para que se active cuando pasa x cosa y ahí seleccione los checkboxes
 
 
@@ -124,28 +126,48 @@ checkboxes.forEach(checkbox => {
  
 
 
- function identificarTareasSeleccionadas() {
+ function identificarTareasSeleccionadas() { //Usar el addEventListener y que liste los checkboxes seleccionados c/ vez que cambian 
    let ul = document.getElementById('UL');
    let elementosLi = ul.getElementsByTagName('li');
    let cantElementosLi = elementosLi.length;
 
-   console.log("elementosLi "+cantElementosLi);
+   console.log("1ero de elementosLi "+elementosLi[0]);  //object HTMLCollection
+
 
    let tareasLS = parseInt(localStorage.getItem("length")) || 0;
+   
    let tareasSeleccionadas = [];
 
-   console.log(tareasLS); 
+   console.log(tareasLS); //Tira bien
    
    if(tareasLS != 0){
-      for(let i = 0; i < tareasLS; i++){
-         if(elementosLi[i].checked){//Estoy preguntando si el elemento del li esta chequeado --> tal vez habria q hacer referencia al input primero
-            tareasLS[i].checkequedo = true;
-            tareasSeleccionadas.push(i);
+      let tareaLS;
+      console.log('Entra al if');
+      let input;
+      for(let i=0; i<cantElementosLi;i++){ //Es lo miso hacer de Li y de LS ya que van a tener la misma cant de tareas
+         console.log('<Entra al for' +i);
+         input = elementosLi[i].getElementsByTagName("input"); //object HTMLCollection
+         console.log('input'+input);
+         if(input.checked){ //Hay que hacer referencia a otra cosa aparte
+            tareasSeleccionadas.push[i];
          }
       }
+      }/*
+      for(let i = 0; i < tareasLS; i++){
+         tareaLS = localStorage.getItem(i);
+         console.log(tareaLS);
 
-   }
-   console.log("Tareas seleccionadas:", tareasCompletadas);
+         if(elementosLi[i].checked){//Estoy preguntando si el elemento del li esta chequeado --> tal vez habria q hacer referencia al input primero
+            tareaLS[i].checkequedo = true;
+            tareasSeleccionadas.push(i);
+            console.log(tareaLS);
+
+         }
+      }
+      */
+
+   
+   console.log("Tareas seleccionadas:", tareasSeleccionadas);
       return tareasSeleccionadas;
    }
   function identificarTareasCompletadas(){ 

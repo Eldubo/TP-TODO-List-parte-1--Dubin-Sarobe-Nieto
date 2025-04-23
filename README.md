@@ -40,3 +40,7 @@ checkboxes.forEach(checkbox => {
     console.log('Elemento padre:', parentElement);
   });
 });
+
+
+// Propiedad slice para array
+//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice 
