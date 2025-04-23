@@ -44,3 +44,5 @@ checkboxes.forEach(checkbox => {
 
 // Propiedad slice para array
 //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice 
+
+https://www.w3schools.com/jsref/met_element_getelementsbytagname.asp
