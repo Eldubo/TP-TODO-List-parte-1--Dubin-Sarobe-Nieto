@@ -59,14 +59,14 @@ function mostrarTareas(filtro = "todas") {
          let tareaLS = localStorage.getItem(miInput.id); //El input tiene asignado el id, debería tenerlo el li?
          console.log('tareaLS' + tareaLS);
          if (miInput.checked) {
-            tareaLS.checkeado = true;
+            tareaLS.checkeado = true;//No cambia el estado, pero no tira error en la consola
             console.log('Se marcó la tarea en LS');
             
          } else {
-            tareaLS.checkeado = false;
+            tareaLS.checkeado = false; 
             console.log('Se desmarcó la tarea en LS');
             }
-         console.log('tareaLS.checkeado: ' + tareaLS.checkeado); //Tira undefined --> Por qué si antes lo cambia bien (de true a false o visceversa)?
+         console.log('tareaLS.checkeado: ' + tareaLS.checkeado); //Tira undefined 
 
      }; 
 
@@ -96,7 +96,7 @@ async function marcarComoCompletadas (){
          let cantTareasCompletadas = 0;
          const tareasSeleccionadasEnLi = identificarTareasSeleccionadas(); //--> Entra pq sale el console.log de elementosLi y el  console.log(tareasLS); , pero acá el valor de tareas es undefined
 
-         if(tareasSeleccionadas > 0){
+         if(tareasSeleccionadas.length > 0){
             for(i=0;i<tareasSeleccionadas.length;i++){
          
                
@@ -176,7 +176,7 @@ checkboxes.forEach(checkbox => {
          tareaLS = localStorage.getItem(i);
          console.log(tareaLS);
 
-         if(tareasLS[i].checked){
+         if(tareasLS.checked){
             tareasSeleccionadas.push(i);
             console.log(tareaLS);
 
