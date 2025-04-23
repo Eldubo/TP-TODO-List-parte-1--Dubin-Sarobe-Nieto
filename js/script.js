@@ -52,6 +52,23 @@ function mostrarTareas(filtro = "todas") {
       miInput.type = "checkbox";
       miInput.checked = tarea.completada;
       miInput.setAttribute("id", i);
+      miInput.onclick = function() {
+         alert('Se hizo click en el checkbox');
+         const parentElement = this.parentElement; //Es el li
+         console.log("parentElement"+parentElement);
+         let tareaLS = localStorage.getItem(miInput.id); //El input tiene asignado el id, debería tenerlo el li?
+         console.log('tareaLS' + tareaLS);
+         if (miInput.checked) {
+            tareaLS.checkeado = true;
+            console.log('Se marcó la tarea en LS');
+            
+         } else {
+            tareaLS.checkeado = false;
+            console.log('Se desmarcó la tarea en LS');
+            }
+         console.log('tareaLS.checkeado: ' + tareaLS.checkeado); //Tira undefined --> Por qué si antes lo cambia bien (de true a false o visceversa)?
+
+     }; 
 
       let texto = document.createTextNode(
          ` ${tarea.texto} (creada: ${new Date(tarea.creadaMomento).toLocaleString()})`
@@ -96,7 +113,7 @@ async function marcarComoCompletadas (){
          
 }
 
-
+/*
 let checkboxes = document.querySelectorAll('input[type="checkbox"]');
 console.log(checkboxes);
 //Hacer referencia al elemento padre - querySelector('input[type="checkbox"]') no está bien
@@ -109,9 +126,10 @@ checkboxes.forEach(checkbox => {
    checkboxes.addEventListener('change', function() {
       console.log('Entra al eventListener');
          if(checkbox.checked){
-            const parentElement = this.parentElement;
+            const parentElement = this.parentElement; //Es el input o el li
             console.log(parentElement);
-            localStorage.getItem('');
+            let tareaLS = localStorage.getItem(parentElement.id); //En caso de que sea el li
+            tareaLS.checkeado = true;
          }
          const parentElement = this.parentElement;//Toma el elemento padre, que debería ser el li (o es el input?)
          const id = parentElement.id; //Toma el id del li, que coincide con el nombre en el Local Storage  
@@ -123,7 +141,7 @@ checkboxes.forEach(checkbox => {
  })
 })
 
- 
+ */
 
 
  function identificarTareasSeleccionadas() { //Usar el addEventListener y que liste los checkboxes seleccionados c/ vez que cambian 
@@ -139,7 +157,7 @@ checkboxes.forEach(checkbox => {
    let tareasSeleccionadas = [];
 
    console.log(tareasLS); //Tira bien
-   
+   /*
    if(tareasLS != 0){
       let tareaLS;
       console.log('Entra al if');
@@ -152,20 +170,18 @@ checkboxes.forEach(checkbox => {
             tareasSeleccionadas.push[i];
          }
       }
-      }/*
+      }
+  */
       for(let i = 0; i < tareasLS; i++){
          tareaLS = localStorage.getItem(i);
          console.log(tareaLS);
 
-         if(elementosLi[i].checked){//Estoy preguntando si el elemento del li esta chequeado --> tal vez habria q hacer referencia al input primero
-            tareaLS[i].checkequedo = true;
+         if(tareasLS[i].checked){
             tareasSeleccionadas.push(i);
             console.log(tareaLS);
 
          }
       }
-      */
-
    
    console.log("Tareas seleccionadas:", tareasSeleccionadas);
       return tareasSeleccionadas;
