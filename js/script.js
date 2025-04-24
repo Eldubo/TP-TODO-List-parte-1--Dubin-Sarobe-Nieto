@@ -1,7 +1,9 @@
+//DUDAS
+//Linea 167 - if (tarea[i].completada) { //No está definida
+//Linea 57 - No tacha las tareas ya realizadas (tema del control de formato creo yo) 
 
 document.addEventListener("DOMContentLoaded", () => mostrarTareas());
-
-
+//localStorage.clear();
 function aniadirTarea() {
    let textoTarea = document.getElementById("ingresoUsuario").value.trim();
 
@@ -16,7 +18,7 @@ function aniadirTarea() {
          checkeado: false
       };
 
-      localStorage.setItem(cantTareasLS, JSON.stringify(tarea));
+      localStorage.setItem((cantTareasLS+1), JSON.stringify(tarea)); //La primer tarea va a tener 1 como "id"
       localStorage.setItem('length', cantTareasLS + 1);
       document.getElementById("ingresoUsuario").value = "";
       mostrarTareas();
@@ -31,11 +33,12 @@ function aniadirTarea() {
 
 
 function mostrarTareas(filtro = "todas") {
+   //Se duplica la tarea que está seleccionada y se complet+o --> una vez está completada y en la otra no (a pesar de que el checkbox está tildado)
    let ul = document.getElementById("UL");
    ul.innerHTML = "";
    let cantTareasLS = parseInt(localStorage.getItem('length')) || 0;
 
-   for (let i = 0; i < cantTareasLS; i++) {
+   for (let i = 1; i <= cantTareasLS; i++) {
       let tareaJSON = localStorage.getItem(i);
       if (!tareaJSON) continue; //Puede ser q no esté la tarea pq se completó y se borró, así que está bien la verificación
 
@@ -50,25 +53,39 @@ function mostrarTareas(filtro = "todas") {
       let li = document.createElement("li");
       let miInput = document.createElement("input");
       miInput.type = "checkbox";
-      miInput.checked = tarea.completada;
+      miInput.checked = tarea.checkeado;
+      miInput.style.textDecoration = "line-through"; //No lo hace
       miInput.setAttribute("id", i);
-      miInput.onclick = function() {
+      /*miInput.onclick = function() {
          alert('Se hizo click en el checkbox');
          const parentElement = this.parentElement; //Es el li
          console.log("parentElement"+parentElement);
-         let tareaLS = localStorage.getItem(miInput.id); //El input tiene asignado el id, debería tenerlo el li?
+         let tareaLS =  JSON.parse(localStorage.getItem(miInput.id)); //El input tiene asignado el id, debería tenerlo el li?
          console.log('tareaLS' + tareaLS);
-         if (miInput.checked) {
-            tareaLS.checkeado = true;//No cambia el estado, pero no tira error en la consola
-            console.log('Se marcó la tarea en LS');
-            
-         } else {
-            tareaLS.checkeado = false; 
-            console.log('Se desmarcó la tarea en LS');
-            }
-         console.log('tareaLS.checkeado: ' + tareaLS.checkeado); //Tira undefined 
+         tareaLS.chequeado = miInput.checked;
+         console.log('tareaLS.checkeado: ' + tareaLS.checkeado); 
+         localStorage.setItem(miInput.id, JSON.stringify(tareaLS));
+         console.log('Estado actualizado:', tareaLS.checkeado ? 'Chequeada' : 'SinChequear');
 
-     }; 
+     }; */
+     
+ miInput.addEventListener('click', function() {
+
+   let tareaLS = JSON.parse(localStorage.getItem(miInput.id)); // Convertir a objeto
+
+   if (!tareaLS) return; // Verificar que exista
+
+   // Actualizar el estado de completada
+
+   tareaLS.checkeado = miInput.checked;
+
+   // Guardar los cambios en localStorage
+
+   localStorage.setItem(miInput.id, JSON.stringify(tareaLS));
+
+   console.log('Estado actualizado:', tareaLS.checkeado ? 'Chequeado' : 'SinChequear');
+
+});
 
       let texto = document.createTextNode(
          ` ${tarea.texto} (creada: ${new Date(tarea.creadaMomento).toLocaleString()})`
@@ -92,21 +109,99 @@ marcarComoCompletadas @ script.js:68
 onclick @ index.html:29
 
 */
-async function marcarComoCompletadas (){
+
+
+function identificarTareasSeleccionadas() { //Usar el addEventListener y que liste los checkboxes seleccionados c/ vez que cambian 
+   let ul = document.getElementById('UL');
+   let elementosLi = ul.getElementsByTagName('li');
+   let cantElementosLi = elementosLi.length;
+
+   console.log("1ero de elementosLi "+elementosLi[0]);  //object HTMLCollection
+
+
+   let tareasLS = parseInt(localStorage.getItem("length")) || 0;
+   
+   let tareasSeleccionadas = [];
+
+   console.log(tareasLS); //Tira bien
+   /*
+   if(tareasLS != 0){
+      let tareaLS;
+      console.log('Entra al if');
+      let input;
+      for(let i=0; i<cantElementosLi;i++){ //Es lo miso hacer de Li y de LS ya que van a tener la misma cant de tareas
+         console.log('<Entra al for' +i);
+         input = elementosLi[i].getElementsByTagName("input"); //object HTMLCollection
+         console.log('input'+input);
+         if(input.checked){ //Hay que hacer referencia a otra cosa aparte
+            tareasSeleccionadas.push[i];
+         }
+      }
+      }
+  */
+      for(let i = 1; i <= tareasLS; i++){
+            let tareaJSON = localStorage.getItem(i);
+            if (!tareaJSON) continue; //Puede ser q no esté la tarea pq se completó y se borró, así que está bien la verificación
+            let tareaLS = JSON.parse(tareaJSON);
+
+            console.log(tareaLS);
+
+         if(tareaLS.checkeado){
+            tareasSeleccionadas.push(i);
+            console.log(tareaLS);
+
+         }
+      }
+   
+   console.log("Tareas seleccionadas:", tareasSeleccionadas);
+      return tareasSeleccionadas;
+   }
+  function identificarTareasCompletadas(){ 
+   let cantTareasLS = parseInt(localStorage.getItem("length")) || 0;
+   let tareasCompletadas = [];
+
+   if(cantTareasLS != 0){
+   for (let i = 1; i <= cantTareasLS; i++) {
+      let tareaJSON = localStorage.getItem(i);
+      if (!tareaJSON) continue; //Puede ser q no esté la tarea pq se completó y se borró, así que está bien la verificación
+      //Hasta donde traba la acción?? Hasta el fin de ese ciclo?
+      let tarea = JSON.parse(tareaJSON);
+
+      if (tarea[i].completada) { //No está definida
+         tareasCompletadas.push(i);
+      }
+   }
+  
+   
+   console.log("Tareas completadas:", tareasCompletadas);
+      return tareasCompletadas;
+  } 
+  }
+ function marcarComoCompletadas (){
          let cantTareasCompletadas = 0;
          const tareasSeleccionadasEnLi = identificarTareasSeleccionadas(); //--> Entra pq sale el console.log de elementosLi y el  console.log(tareasLS); , pero acá el valor de tareas es undefined
+         let ul = document.getElementById('UL');
+         let elementosLi = ul.getElementsByTagName('li');
 
-         if(tareasSeleccionadas.length > 0){
-            for(i=0;i<tareasSeleccionadas.length;i++){
+         if(tareasSeleccionadasEnLi.length > 0){
+            for(i=0;i<tareasSeleccionadasEnLi.length;i++){
          
                
                   cantTareasCompletadas++;
-                  elementosLi[tareasSeleccionadasEnLi[i]].style.textDecoration = "line-through";        
-                  localStorage.getItem(tareasSeleccionadasEnLi[i]).completadaMomento = new Date().toISOString();
-                  localStorage.getItem(tareasSeleccionadasEnLi[i]).completada = true;
+                  console.log('elementosLi[tareasSeleccionadasEnLi[i]]'+ elementosLi[tareasSeleccionadasEnLi[i]]);
+                  elementosLi[tareasSeleccionadasEnLi[i]].style.textDecoration = "line-through";   //No se tacha     
+                  let tareaLS = JSON.parse(localStorage.getItem(tareasSeleccionadasEnLi[i]));
+                  
+                  //No toma ninguna de estas dos cosas
+                  tareaLS.completadaMomento = new Date().toISOString();
+                  tareaLS.completada = true;
+
+                  localStorage.setItem(i, JSON.stringify(tareaLS));
+                  console.log('Estado actualizado:', tareaLS.completada ? 'Completada' : 'Pendiente'); 
+                  console.log('Harario guardado:'+ tareaLS.completadaMomento);
             }
             cantTareasCompletadas != 0 && alert(cantTareasCompletadas + "tareas se marcaron como completadas");
-            
+            mostrarTareas();
          }else{
             alert("No hay tareas seleccionadas");
          }
@@ -144,82 +239,18 @@ checkboxes.forEach(checkbox => {
  */
 
 
- function identificarTareasSeleccionadas() { //Usar el addEventListener y que liste los checkboxes seleccionados c/ vez que cambian 
-   let ul = document.getElementById('UL');
-   let elementosLi = ul.getElementsByTagName('li');
-   let cantElementosLi = elementosLi.length;
-
-   console.log("1ero de elementosLi "+elementosLi[0]);  //object HTMLCollection
-
-
-   let tareasLS = parseInt(localStorage.getItem("length")) || 0;
-   
-   let tareasSeleccionadas = [];
-
-   console.log(tareasLS); //Tira bien
-   /*
-   if(tareasLS != 0){
-      let tareaLS;
-      console.log('Entra al if');
-      let input;
-      for(let i=0; i<cantElementosLi;i++){ //Es lo miso hacer de Li y de LS ya que van a tener la misma cant de tareas
-         console.log('<Entra al for' +i);
-         input = elementosLi[i].getElementsByTagName("input"); //object HTMLCollection
-         console.log('input'+input);
-         if(input.checked){ //Hay que hacer referencia a otra cosa aparte
-            tareasSeleccionadas.push[i];
-         }
-      }
-      }
-  */
-      for(let i = 0; i < tareasLS; i++){
-         tareaLS = localStorage.getItem(i);
-         console.log(tareaLS);
-
-         if(tareasLS.checked){
-            tareasSeleccionadas.push(i);
-            console.log(tareaLS);
-
-         }
-      }
-   
-   console.log("Tareas seleccionadas:", tareasSeleccionadas);
-      return tareasSeleccionadas;
-   }
-  function identificarTareasCompletadas(){ 
-   let ul = document.getElementById('UL');
-   let elementosLi = ul.getElementsByTagName('li');
-   let cantTareasLS = parseInt(localStorage.getItem("length")) || 0;
-   let tareasCompletadas = [];
-
-   if(tareasLS != 0){
-   for (let i = 0; i < cantTareasLS; i++) {
-      let tareaJSON = localStorage.getItem(i);
-      if (!tareaJSON) continue; //Puede ser q no esté la tarea pq se completó y se borró, así que está bien la verificación
-      let tarea = JSON.parse(tareaJSON);
-
-      if (tarea[i].completada) {
-         tareasCompletadas.push(i);
-      }
-   }
-  
-   
-   console.log("Tareas completadas:", tareasCompletadas);
-      return tareasCompletadas;
-  } 
-  }
 function eliminarTareas() {
       let tareasSeleccionadas = identificarTareasSeleccionadas();
-      let cantTareasEliminadas = 0
-
-      if(tareasSeleccionadas > 0){
+      let cantTareasEliminadas = 0;
+      console.log('tareasSeleccionadas' + tareasSeleccionadas);
+      if(tareasSeleccionadas.length > 0){
          for(i=0;i<tareasSeleccionadas.length;i++){
-            console.log(tareasSeleccionadas[i]);
-            localStorage.removeItem(tareasSeleccionadas[i]);
+            console.log("Tarea seleccionada"+ tareasSeleccionadas[i]);
+            localStorage.removeItem((tareasSeleccionadas[i]));
                cantTareasEliminadas++;
          }
-         cantTareasCompletadas != 0 && alert(cantTareasCompletadas + "tareas se marcaron como completadas");
-         
+         cantTareasEliminadas != 0 && alert(cantTareasEliminadas + "tareas se marcaron como eliminadas");
+         mostrarTareas();
       }else{
          alert("No hay tareas seleccionadas");
       }
@@ -227,21 +258,28 @@ function eliminarTareas() {
 }
 function eliminarTareasCompletadas(){
    const tareasCompletadas = identificarTareasCompletadas(); 
-   for(let i = 0; i < tareasCompletadas; i++){
-      localStorage.removeItem(tareasCompletadas[i]);
+   if(tareasCompletadas.length > 0){
+      for(let i = 0; i < tareasCompletadas; i++){
+         localStorage.removeItem((tareasCompletadas[i]+1));
+      }
+      mostrarTareas();
+   }else{
+      console.log("No hay tareas completadas");
    }
+   
 }
 function tareaMasRapida() {
    let cantTareasLS = parseInt(localStorage.getItem("length")) || 0;
    let tareaRapida = null;
    let menorDuracion = Infinity;
 
-   for (let i = 0; i < cantTareasLS; i++) {
+   for (let i = 1; i <= cantTareasLS; i++) {
       let tareaJSON = localStorage.getItem(i);
       if (!tareaJSON) continue;
 
       let tarea = JSON.parse(tareaJSON);
-      if (tarea.completada && tarea.completadaMomento) {
+      //if (tarea.completada && tarea.completadaMomento) { --> completadaMomento guarda un Date, no un bool
+         if (tarea.completada && tarea.completadaMomento) {
          let creada = new Date(tarea.creadaMomento).getTime();
          let finalizada = new Date(tarea.completadaMomento).getTime();
          let duracion = finalizada - creada;
