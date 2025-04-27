@@ -1,6 +1,7 @@
 //DUDAS
-//Linea 167 - if (tarea[i].completada) { //No está definida
-//Linea 57 - No tacha las tareas ya realizadas (tema del control de formato creo yo) 
+//Linea 168 - if (tarea[i].completada) { //No está definida
+//Linea 58 - No tacha las tareas ya realizadas (tema del control de formato creo yo) 
+//Línea 195 - no encuentra el inputIndicado (No hay forma de que no exista)
 
 document.addEventListener("DOMContentLoaded", () => mostrarTareas());
 //localStorage.clear();
@@ -163,7 +164,8 @@ function identificarTareasSeleccionadas() { //Usar el addEventListener y que lis
    if(cantTareasLS != 0){
    for (let i = 1; i <= cantTareasLS; i++) {
       let tareaJSON = localStorage.getItem(i);
-      if (!tareaJSON) continue; //Puede ser q no esté la tarea pq se completó y se borró, así que está bien la verificación
+      if (tareaJSON != undefined) continue; //Puede ser q no esté la tarea pq se completó y se borró, así que está bien la verificación
+      if (!tareaJSON) continue; //Puede ser q no esté la tarea pq se completó y se borró, así que está bien que haya verificación
       //Hasta donde traba la acción?? Hasta el fin de ese ciclo?
       let tarea = JSON.parse(tareaJSON);
 
@@ -182,23 +184,30 @@ function identificarTareasSeleccionadas() { //Usar el addEventListener y que lis
          const tareasSeleccionadasEnLi = identificarTareasSeleccionadas(); //--> Entra pq sale el console.log de elementosLi y el  console.log(tareasLS); , pero acá el valor de tareas es undefined
          let ul = document.getElementById('UL');
          let elementosLi = ul.getElementsByTagName('li');
+         let elementosInputDentroDeLi = document.querySelectorAll('li input');
+         let nroDeTarea;
 
          if(tareasSeleccionadasEnLi.length > 0){
             for(i=0;i<tareasSeleccionadasEnLi.length;i++){
-         
-               
-                  cantTareasCompletadas++;
-                  console.log('elementosLi[tareasSeleccionadasEnLi[i]]'+ elementosLi[tareasSeleccionadasEnLi[i]]);
-                  elementosLi[tareasSeleccionadasEnLi[i]].style.textDecoration = "line-through";   //No se tacha     
-                  let tareaLS = JSON.parse(localStorage.getItem(tareasSeleccionadasEnLi[i]));
                   
-                  //No toma ninguna de estas dos cosas
-                  tareaLS.completadaMomento = new Date().toISOString();
-                  tareaLS.completada = true;
-
-                  localStorage.setItem(i, JSON.stringify(tareaLS));
-                  console.log('Estado actualizado:', tareaLS.completada ? 'Completada' : 'Pendiente'); 
-                  console.log('Harario guardado:'+ tareaLS.completadaMomento);
+                  nroDeTarea = tareasSeleccionadasEnLi[i]; //Tiene que coincidir con el id del input guardado en el li, no con la pos de ese li en el array de elementosLi
+                  console.log('nroDeTarea ' + nroDeTarea );
+                  let inputIndicado = Array.from(elementosInputDentroDeLi).find(input => input.id === nroDeTarea); //Esto devuelve undefined --> por qué???
+                 
+                     cantTareasCompletadas++;
+                     console.log('Input seleccionado:'+ inputIndicado.id);
+                     inputIndicado.parentElement.style.textDecoration = "line-through"; //No hace esto!!!!
+                     let tareaLS = JSON.parse(localStorage.getItem(inputIndicado.id));
+                     
+                     //No toma ninguna de estas dos cosas
+                     tareaLS.completadaMomento = new Date().toISOString();
+                     tareaLS.completada = true;
+   
+                     localStorage.setItem(inputIndicado.id, JSON.stringify(tareaLS));
+                     console.log('Estado actualizado:', tareaLS.completada ? 'Completada' : 'Pendiente'); 
+                     console.log('Harario guardado:'+ tareaLS.completadaMomento);
+                  
+                  
             }
             cantTareasCompletadas != 0 && alert(cantTareasCompletadas + "tareas se marcaron como completadas");
             mostrarTareas();
