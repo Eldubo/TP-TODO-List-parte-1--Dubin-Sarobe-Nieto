@@ -159,19 +159,25 @@ function identificarTareasSeleccionadas() { //Usar el addEventListener y que lis
    }
   function identificarTareasCompletadas(){ 
    let cantTareasLS = parseInt(localStorage.getItem("length")) || 0;
+   console.log(`cantTareasLS ${cantTareasLS}`)
    let tareasCompletadas = [];
 
    if(cantTareasLS != 0){
    for (let i = 1; i <= cantTareasLS; i++) {
       let tareaJSON = localStorage.getItem(i);
-      if (tareaJSON != undefined) continue; //Puede ser q no esté la tarea pq se completó y se borró, así que está bien la verificación
-      if (!tareaJSON) continue; //Puede ser q no esté la tarea pq se completó y se borró, así que está bien que haya verificación
-      //Hasta donde traba la acción?? Hasta el fin de ese ciclo?
       let tarea = JSON.parse(tareaJSON);
 
-      if (tarea[i].completada) { //No está definida
-         tareasCompletadas.push(i);
+      console.log(`tarea ${tarea}`)
+      if(tarea != null){ //Puede ser q no esté la tarea pq se completó y se borró, así que está bien la verificación
+         if (tarea.completada) { //No está definida
+            tareasCompletadas.push(i);
+            console.log(`La tarea ${tarea} está marcada como completada y debería agregarse al array`);
+         }
       }
+      //if (tarea != null) continue; 
+      //console.log('Continua leugo de (tareaJSON != undefined)');
+
+      
    }
   
    
@@ -181,19 +187,33 @@ function identificarTareasSeleccionadas() { //Usar el addEventListener y que lis
   }
  function marcarComoCompletadas (){
          let cantTareasCompletadas = 0;
-         const tareasSeleccionadasEnLi = identificarTareasSeleccionadas(); //--> Entra pq sale el console.log de elementosLi y el  console.log(tareasLS); , pero acá el valor de tareas es undefined
-         let ul = document.getElementById('UL');
+         const tareasSeleccionadasEnLS = identificarTareasSeleccionadas(); //--> Entra pq sale el console.log de elementosLi y el  console.log(tareasLS); , pero acá el valor de tareas es undefined
+        /* let ul = document.getElementById('UL');
          let elementosLi = ul.getElementsByTagName('li');
          let elementosInputDentroDeLi = document.querySelectorAll('li input');
          let nroDeTarea;
+         let arrayElementosSeleccionados;
+         */
+         for(let i = 0; i < tareasSeleccionadasEnLS.length; i++){
+            let tareaJSON = localStorage.getItem(tareasSeleccionadasEnLS[i]);
+            let tarea = JSON.parse(tareaJSON);
+            tarea.completadaMomento = new Date().toISOString();
+            tarea.completada = true;
+            console.log(`Tarea ${tareasSeleccionadasEnLS[i]} compeltada? ${tarea.completada}`);
+            localStorage.setItem(tareasSeleccionadasEnLS[i], JSON.stringify(tarea));
 
+         }
+         mostrarTareas();
+
+      }
+            /*
          if(tareasSeleccionadasEnLi.length > 0){
             for(i=0;i<tareasSeleccionadasEnLi.length;i++){
                   
                   nroDeTarea = tareasSeleccionadasEnLi[i]; //Tiene que coincidir con el id del input guardado en el li, no con la pos de ese li en el array de elementosLi
                   console.log('nroDeTarea ' + nroDeTarea );
                   let inputIndicado = Array.from(elementosInputDentroDeLi).find(input => input.id === nroDeTarea); //Esto devuelve undefined --> por qué???
-                 
+                  
                      cantTareasCompletadas++;
                      console.log('Input seleccionado:'+ inputIndicado.id);
                      inputIndicado.parentElement.style.textDecoration = "line-through"; //No hace esto!!!!
@@ -214,8 +234,8 @@ function identificarTareasSeleccionadas() { //Usar el addEventListener y que lis
          }else{
             alert("No hay tareas seleccionadas");
          }
-         
-}
+         */
+
 
 /*
 let checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -267,10 +287,16 @@ function eliminarTareas() {
 }
 function eliminarTareasCompletadas(){
    const tareasCompletadas = identificarTareasCompletadas(); 
+   let array = [];
    if(tareasCompletadas.length > 0){
-      for(let i = 0; i < tareasCompletadas; i++){
-         localStorage.removeItem((tareasCompletadas[i]+1));
+      console.log('Entra al if');
+      for(let i = 0; i < tareasCompletadas.length; i++){
+         console.log('Entra al for')
+         console.log(`localStorage.getItem ${localStorage.getItem(tareasCompletadas[i])}`)
+         localStorage.removeItem((tareasCompletadas[i]));
+         array.push(i);
       }
+      console.log(`array ${array}`);
       mostrarTareas();
    }else{
       console.log("No hay tareas completadas");
